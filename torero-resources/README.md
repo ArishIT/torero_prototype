@@ -81,13 +81,4 @@ Successfully completed apply-config
 The project requires the following Python packages:
 - `torero`
 - `requests>=2.31.0`
-- `urllib3>=2.0.7`
-
-## Extending the Decorator
-
-You can extend the auto-retry decorator by:
-
-1. Adding more configuration options to the JSON schema
-2. Implementing additional retry strategies
-3. Adding support for more exception types
-4. Integrating with external monitoring or alerting systems 
+- `urllib3>=2.0.7` 
