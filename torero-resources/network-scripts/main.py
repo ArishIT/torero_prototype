@@ -12,7 +12,7 @@ import json
 from typing import Dict, Any, Optional
 from torero_decorators import ToreroAutoRetry
 
-# Load decorator configuration from JSON schema
+# Load decorator configuration
 auto_retry = ToreroAutoRetry("auto-retry-deco.json")
 
 # Simulated network operations
@@ -48,9 +48,8 @@ class NetworkDevice:
             "hostname": self.hostname,
             "interfaces": [
                 {"name": "eth0", "status": "up", "ip": "192.168.1.1"},
-                {"name": "eth1", "status": "down", "ip": "10.0.0.1"}
-            ],
-            "version": "1.0.0"
+                {"name": "eth1", "status": "down", "ip": "192.168.2.1"}
+            ]
         }
     
     @auto_retry
@@ -72,64 +71,41 @@ class NetworkDevice:
             print(f"Disconnected from {self.hostname}")
             self.connected = False
 
-def parse_args() -> argparse.Namespace:
-    """Parse command line arguments"""
-    parser = argparse.ArgumentParser(description="Network Operations Example with Auto-Retry")
-    parser.add_argument("--hostname", required=True, help="Device hostname")
-    parser.add_argument("--username", required=True, help="Username")
-    parser.add_argument("--password", required=True, help="Password")
-    parser.add_argument("--operation", choices=["connect", "get-config", "apply-config"], 
-                        required=True, help="Operation to perform")
+def main():
+    parser = argparse.ArgumentParser(description="Network operations with auto-retry functionality")
+    parser.add_argument('--hostname', required=True, help="Device hostname to connect to")
+    parser.add_argument('--username', required=True, help="Username for device authentication")
+    parser.add_argument('--password', required=True, help="Password for device authentication")
+    parser.add_argument('--operation', required=True, choices=['connect', 'get-config', 'apply-config'],
+                      help="Operation to perform on the device")
+    parser.add_argument('--max-retries', type=int, default=3, help="Maximum number of retry attempts")
+    parser.add_argument('--delay', type=float, default=1.0, help="Initial delay between retries in seconds")
+    parser.add_argument('--backoff-factor', type=float, default=2.0, help="Multiplier for delay after each retry")
     
-    # Add decorator configuration options
-    parser.add_argument("--max-retries", type=int, help="Maximum number of retry attempts")
-    parser.add_argument("--delay", type=float, help="Initial delay between retries in seconds")
-    parser.add_argument("--backoff-factor", type=float, help="Multiplier for delay after each retry")
-    
-    return parser.parse_args()
-
-def main() -> int:
-    """Main function"""
-    args = parse_args()
-    
-    # Update decorator configuration if provided
-    config = {}
-    if args.max_retries:
-        config["max_retries"] = args.max_retries
-    if args.delay:
-        config["delay"] = args.delay
-    if args.backoff_factor:
-        config["backoff_factor"] = args.backoff_factor
-    
-    if config:
-        auto_retry.update_config(config)
+    args = parser.parse_args()
     
     # Create device instance
     device = NetworkDevice(args.hostname, args.username, args.password)
     
-    try:
-        # Connect to device
-        device.connect()
-        
-        # Perform requested operation
-        if args.operation == "get-config":
-            config = device.get_config()
-            print(f"Device configuration: {config}")
-        elif args.operation == "apply-config":
-            # Example configuration to apply
-            config = {
-                "interfaces": [
-                    {"name": "eth0", "ip": "192.168.1.2"}
-                ]
-            }
-            device.apply_config(config)
-        
-        return 0
-    except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
-        return 1
-    finally:
-        device.disconnect()
+    # Perform requested operation
+    if args.operation == 'connect':
+        result = device.connect()
+    elif args.operation == 'get-config':
+        result = device.get_config()
+    elif args.operation == 'apply-config':
+        # Example configuration to apply
+        config = {
+            "interfaces": [
+                {"name": "eth0", "ip": "192.168.1.2"}
+            ]
+        }
+        result = device.apply_config(config)
+    else:
+        print(f"Operation {args.operation} not implemented")
+        sys.exit(1)
+    
+    print(f"Operation completed successfully: {result}")
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main()) 

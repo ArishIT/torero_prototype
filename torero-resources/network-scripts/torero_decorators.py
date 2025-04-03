@@ -28,9 +28,9 @@ class ToreroAutoRetry:
             self.config = json.load(f)
         
         # Set default values from schema
-        self.max_retries = self.config['properties']['max_retries']['default']
+        self.max_retries = self.config['properties']['max-retries']['default']
         self.delay = self.config['properties']['delay']['default']
-        self.backoff_factor = self.config['properties']['backoff_factor']['default']
+        self.backoff_factor = self.config['properties']['backoff-factor']['default']
         self.exceptions = tuple(eval(exc) for exc in self.config['properties']['exceptions']['default'])
     
     def __call__(self, func: Callable) -> Callable:
@@ -79,32 +79,11 @@ class ToreroAutoRetry:
         Args:
             config (Dict[str, Any]): New configuration values
         """
-        if 'max_retries' in config:
-            self.max_retries = config['max_retries']
+        if 'max-retries' in config:
+            self.max_retries = config['max-retries']
         if 'delay' in config:
             self.delay = config['delay']
-        if 'backoff_factor' in config:
-            self.backoff_factor = config['backoff_factor']
+        if 'backoff-factor' in config:
+            self.backoff_factor = config['backoff-factor']
         if 'exceptions' in config:
-            self.exceptions = tuple(eval(exc) for exc in config['exceptions'])
-
-# Example usage
-if __name__ == "__main__":
-    # Create decorator instance
-    auto_retry = ToreroAutoRetry()
-    
-    # Example function that might fail
-    @auto_retry
-    def example_network_operation():
-        # Simulate a network operation that might fail
-        import random
-        if random.random() < 0.7:  # 70% chance of failure
-            raise ConnectionError("Failed to connect to network device")
-        return "Operation successful!"
-    
-    # Test the decorator
-    try:
-        result = example_network_operation()
-        print(f"Result: {result}")
-    except Exception as e:
-        print(f"Final error: {e}") 
+            self.exceptions = tuple(eval(exc) for exc in config['exceptions']) 
