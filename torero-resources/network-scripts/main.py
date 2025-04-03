@@ -5,7 +5,6 @@ This script simulates common network operations that might fail and need retries
 """
 
 import random
-import time
 from torero_decorators import autoretry
 
 @autoretry(max_retries=3, delay=1.0, backoff_factor=2.0)
