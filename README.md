@@ -6,18 +6,6 @@ This repository demonstrates how to use the auto-retry decorator with Torero to 
 
 The auto-retry decorator provides a simple way to add retry logic to network automation scripts. It's designed to work with Torero's decorator system and can be attached to any service.
 
-## Project Structure
-
-```
-torero-resources/
-├── network-scripts/
-│   ├── main.py                 # Main network operations script with retry functionality
-│   ├── requirements.txt        # Python dependencies
-│   ├── auto-retry-deco.json    # JSON schema definition for the decorator
-│   └── torero_decorators.py    # Python implementation of the auto-retry decorator
-└── network-operations.json     # Service configuration file
-```
-
 ## Setup with Torero
 
 ### 1. Create a Repository
