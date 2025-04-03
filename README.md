@@ -22,6 +22,25 @@ torero-resources/
 └── network-operations.json  # Service configuration
 ```
 
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/arishvirani/torero_prototype.git
+cd torero_prototype
+```
+
+2. Install dependencies:
+```bash
+pip install -r torero-resources/network-scripts/requirements.txt
+```
+
+3. Make sure you have Torero CLI installed and configured:
+```bash
+pip install torero
+torero configure  # Follow the prompts to set up your environment
+```
+
 ## Quick Start
 
 1. Create the service:
