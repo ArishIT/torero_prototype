@@ -33,10 +33,14 @@ cd torero_prototype
 
 ### 1. Create a Repository
 
-First, create a repository in Torero to store your scripts:
+First, create a repository in Torero to store your scripts. You can use either a local file path or a GitHub URL:
 
 ```bash
-torero create repository network-operations-repo --url file:///path/to/torero-resources
+# Option 1: Using local file path
+torero create repository network-operations-repo --url file:///Users/arishvirani/Desktop/torero_project/torero-resources
+
+# Option 2: Using GitHub URL
+torero create repository network-operations-repo --url https://github.com/ArishIT/torero_prototype.git --reference main
 ```
 
 ### 2. Create the Decorator
@@ -44,7 +48,7 @@ torero create repository network-operations-repo --url file:///path/to/torero-re
 Create the auto-retry decorator in Torero using the JSON schema:
 
 ```bash
-torero create decorator auto-retry --schema @./network-scripts/auto-retry-deco.json
+torero create decorator auto-retry --schema @./torero-resources/network-scripts/auto-retry-deco.json
 ```
 
 ### 3. Create a Python Script Service
@@ -52,7 +56,7 @@ torero create decorator auto-retry --schema @./network-scripts/auto-retry-deco.j
 Create a service for the network operations script:
 
 ```bash
-torero create service python-script network-operations --repository network-operations-repo --filename main.py --working-dir network-scripts --description "Network operations with auto-retry functionality"
+torero create service python-script network-operations --repository network-operations-repo --filename main.py --working-dir torero-resources/network-scripts --description "Network operations with auto-retry functionality"
 ```
 
 ## Running the Service
@@ -110,6 +114,22 @@ The project consists of two main components:
    - Demonstrates decorator usage
    - Simulates network operations
    - Shows retry behavior in action
+
+## Troubleshooting
+
+If you encounter the "repository not found" error when running the service:
+
+1. Verify the repository exists:
+```bash
+torero get repositories
+```
+
+2. Check if the service was created correctly:
+```bash
+torero get services
+```
+
+3. Make sure you're using the correct repository name and path in all commands.
 
 ## Contributing
 
