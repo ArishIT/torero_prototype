@@ -26,7 +26,7 @@ torero-resources/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/arishvirani/torero_prototype.git
+git clone https://github.com/ArishIT/torero_prototype.git
 cd torero_prototype
 ```
 
