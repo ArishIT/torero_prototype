@@ -6,12 +6,17 @@ This repository demonstrates how to use the auto-retry decorator with Torero to 
 
 The auto-retry decorator provides a simple way to add retry logic to network automation scripts. It's designed to work with Torero's decorator system and can be attached to any service.
 
-## Files
+## Project Structure
 
-- `auto-retry-deco.json`: JSON schema definition for the decorator
-- `torero_decorators.py`: Python implementation of the auto-retry decorator
-- `network_operations.py`: Example script without retry functionality
-- `network_operations_with_retry.py`: Example script with retry functionality
+```
+torero-resources/
+├── network-scripts/
+│   ├── main.py                 # Main network operations script with retry functionality
+│   ├── requirements.txt        # Python dependencies
+│   ├── auto-retry-deco.json    # JSON schema definition for the decorator
+│   └── torero_decorators.py    # Python implementation of the auto-retry decorator
+└── network-operations.json     # Service configuration file
+```
 
 ## Setup with Torero
 
@@ -20,7 +25,7 @@ The auto-retry decorator provides a simple way to add retry logic to network aut
 First, create a repository in Torero to store your scripts:
 
 ```bash
-torero create repository network-automation-repo --description "Network automation scripts with auto-retry decorator" --url https://github.com/yourusername/network-automation-repo.git --reference main
+torero create repository network-operations-repo --url file:///path/to/torero-resources
 ```
 
 ### 2. Create the Decorator
@@ -28,7 +33,7 @@ torero create repository network-automation-repo --description "Network automati
 Create the auto-retry decorator in Torero using the JSON schema:
 
 ```bash
-torero create decorator auto-retry --schema @./auto-retry-deco.json
+torero create decorator auto-retry --schema @./network-scripts/auto-retry-deco.json
 ```
 
 ### 3. Create a Python Script Service
@@ -36,15 +41,7 @@ torero create decorator auto-retry --schema @./auto-retry-deco.json
 Create a service for the network operations script:
 
 ```bash
-torero create service python-script network-operations --repository network-automation-repo --filename network_operations_with_retry.py --description "Network operations with auto-retry functionality"
-```
-
-### 4. Attach the Decorator to the Service
-
-Attach the auto-retry decorator to the service:
-
-```bash
-torero attach-decorator auto-retry --service network-operations
+torero create service python-script network-operations --repository network-operations-repo --filename main.py --working-dir network-scripts --description "Network operations with auto-retry functionality"
 ```
 
 ## Running the Service
@@ -55,27 +52,34 @@ You can run the service with various parameters:
 # Basic usage
 torero run service python-script network-operations --set hostname=router1 --set username=admin --set password=secret --set operation=connect
 
-# With decorator configuration
-torero run service python-script network-operations --set hostname=router1 --set username=admin --set password=secret --set operation=connect --set max-retries=5 --set delay=2.0
+# With retry configuration
+torero run service python-script network-operations --set hostname=router1 --set username=admin --set password=secret --set operation=connect --set max-retries=3 --set delay=1.0 --set backoff-factor=2.0
 ```
 
-## Decorator Configuration Options
+## Available Operations
+
+The service supports the following operations:
+
+- `connect`: Attempt to connect to a network device
+- `get-config`: Retrieve device configuration
+- `apply-config`: Apply configuration to the device
+
+## Retry Configuration Options
 
 The auto-retry decorator supports the following configuration options:
 
-- `max_retries`: Maximum number of retry attempts (default: 3)
+- `max-retries`: Maximum number of retry attempts (default: 3)
 - `delay`: Initial delay between retries in seconds (default: 1.0)
-- `backoff_factor`: Multiplier for delay after each retry (default: 2.0)
-- `exceptions`: List of exception types to catch and retry on (default: ["ConnectionError", "TimeoutError"])
+- `backoff-factor`: Multiplier for delay after each retry (default: 2.0)
 
 ## Example Output
 
 When running the service, you'll see output like:
 
 ```
-2023-06-01 12:34:56,789 - torero_decorators - WARNING - Attempt 1/3 failed for connect. Error: Failed to connect to router1. Retrying in 1.0 seconds...
-2023-06-01 12:34:57,789 - torero_decorators - WARNING - Attempt 2/3 failed for connect. Error: Failed to connect to router1. Retrying in 2.0 seconds...
-2023-06-01 12:34:59,789 - torero_decorators - INFO - Successfully connected to router1
+2025-04-03 15:23:43,904 - torero_decorators - WARNING - Attempt 1/3 failed for connect. Error: Failed to connect to router1. Retrying in 1.0 seconds...
+2025-04-03 15:23:44,904 - torero_decorators - INFO - Successfully connected to router1
+Operation completed successfully: True
 ```
 
 ## Benefits
@@ -84,6 +88,13 @@ When running the service, you'll see output like:
 - **Configurable Retry Logic**: Adjust retry parameters based on your specific needs
 - **Consistent Behavior**: Apply the same retry logic across different network automation scripts
 - **Detailed Logging**: Track retry attempts and failures for debugging
+
+## Dependencies
+
+The project requires the following Python packages:
+- `torero`
+- `requests>=2.31.0`
+- `urllib3>=2.0.7`
 
 ## Extending the Decorator
 
