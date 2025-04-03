@@ -1,75 +1,72 @@
 # Torero Auto-Retry Decorator Example
 
-This repository demonstrates how to use the auto-retry decorator with Torero to handle common network automation tasks with automatic retry functionality.
+This repository demonstrates a simplified auto-retry decorator implementation for network automation tasks using Torero. The decorator automatically retries failed operations with exponential backoff.
 
 ## Overview
 
-The auto-retry decorator provides a simple way to add retry logic to network automation scripts. It's designed to work with Torero's decorator system and can be attached to any service.
+The auto-retry decorator provides a simple way to handle transient failures in network operations by:
+- Automatically retrying failed operations
+- Implementing exponential backoff
+- Providing detailed logging of retry attempts
+- Simulating network operations with configurable success rates
 
-## Setup with Torero
+## Project Structure
 
-### 1. Create a Repository
-
-First, create a repository in Torero to store your scripts:
-
-```bash
-torero create repository network-operations-repo --url file:///path/to/torero-resources
+```
+torero-resources/
+├── network-scripts/
+│   ├── main.py              # Main script with simulated operations
+│   ├── torero_decorators.py # Auto-retry decorator implementation
+│   ├── auto-retry-deco.json # Decorator schema
+│   └── requirements.txt     # Project dependencies
+└── network-operations.json  # Service configuration
 ```
 
-### 2. Create the Decorator
+## Quick Start
 
-Create the auto-retry decorator in Torero using the JSON schema:
-
+1. Create the service:
 ```bash
-torero create decorator auto-retry --schema @./network-scripts/auto-retry-deco.json
+torero create service python-script network-operations --filename main.py --working-dir network-scripts
 ```
 
-### 3. Create a Python Script Service
-
-Create a service for the network operations script:
-
-```bash
-torero create service python-script network-operations --repository network-operations-repo --filename main.py --working-dir network-scripts --description "Network operations with auto-retry functionality"
-```
-
-## Running the Service
-
-You can run the service with a simple command:
-
+2. Run the service:
 ```bash
 torero run service python-script network-operations
 ```
 
-The script will:
-1. Try each operation (connect, get-config, apply-config)
-2. Each operation has a 70% chance of success
-3. If an operation fails, it will retry up to 3 times with increasing delays
-4. You'll see the results in the output
+The service will attempt three operations (connect, get-config, apply-config) with a 70% success rate for each. Failed operations will be retried automatically.
+
+## Configuration
+
+The auto-retry decorator supports the following parameters (defined in `auto-retry-deco.json`):
+
+- `max-retries`: Maximum number of retry attempts (default: 3)
+- `delay`: Initial delay between retries in seconds (default: 1.0)
+- `backoff-factor`: Multiplier for delay after each retry (default: 2.0)
 
 ## Example Output
 
-When running the service, you'll see output like:
-
 ```
-2025-04-03 15:23:43,904 - torero_decorators - WARNING - Attempt 1/3 failed for connect. Error: Operation connect failed. Retrying in 1.0 seconds...
-2025-04-03 15:23:44,904 - torero_decorators - INFO - Successfully completed connect
+2025-04-03 15:51:51 - WARNING - Attempt 1/3 failed: Operation connect failed. Retrying in 1.0 seconds...
+2025-04-03 15:51:52 - WARNING - Attempt 2/3 failed: Operation connect failed. Retrying in 2.0 seconds...
+Successfully completed connect
 Successfully completed get-config
-Successfully completed apply-config
+Operation apply-config failed after all retries
 ```
 
 ## Benefits
 
-- **Simplified Error Handling**: Automatically retry operations that might fail due to temporary issues
-- **Configurable Retry Logic**: Adjust retry parameters based on your specific needs
-- **Consistent Behavior**: Apply the same retry logic across different network automation scripts
-- **Detailed Logging**: Track retry attempts and failures for debugging
+- **Simplified Error Handling**: Automatically handle transient failures
+- **Configurable Retry Logic**: Customize retry behavior through parameters
+- **Clear Logging**: Track retry attempts and failures for debugging
+- **Easy Integration**: Simple decorator-based approach
 
 ## Dependencies
 
-The project requires the following Python packages:
-- `torero`
-- `requests>=2.31.0`
-- `urllib3>=2.0.7`
+Required Python packages:
+- torero
+- requests>=2.31.0
+- urllib3>=2.0.7
 
 ## Extending the Decorator
 
