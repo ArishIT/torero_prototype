@@ -35,12 +35,6 @@ cd torero_prototype
 pip install -r torero-resources/network-scripts/requirements.txt
 ```
 
-3. Make sure you have Torero CLI installed and configured:
-```bash
-pip install torero
-torero configure  # Follow the prompts to set up your environment
-```
-
 ## Quick Start
 
 1. Create the service:
