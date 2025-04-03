@@ -24,7 +24,7 @@
             ],
             "description": "Operation to perform on the device"
         },
-        "max_retries": {
+        "max-retries": {
             "type": "integer",
             "minimum": 1,
             "default": 3,
@@ -36,7 +36,7 @@
             "default": 1.0,
             "description": "Initial delay between retries in seconds"
         },
-        "backoff_factor": {
+        "backoff-factor": {
             "type": "number",
             "minimum": 1.0,
             "default": 2.0,
