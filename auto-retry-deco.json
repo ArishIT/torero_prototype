@@ -3,6 +3,27 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
+        "hostname": {
+            "type": "string",
+            "description": "Device hostname to connect to"
+        },
+        "username": {
+            "type": "string",
+            "description": "Username for device authentication"
+        },
+        "password": {
+            "type": "string",
+            "description": "Password for device authentication"
+        },
+        "operation": {
+            "type": "string",
+            "enum": [
+                "connect",
+                "get-config",
+                "apply-config"
+            ],
+            "description": "Operation to perform on the device"
+        },
         "max_retries": {
             "type": "integer",
             "minimum": 1,
@@ -33,5 +54,11 @@
             "description": "List of exception types to catch and retry on"
         }
     },
+    "required": [
+        "hostname",
+        "username",
+        "password",
+        "operation"
+    ],
     "additionalProperties": false
 }
