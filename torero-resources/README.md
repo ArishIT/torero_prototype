@@ -4,7 +4,15 @@ This repository demonstrates how to use the auto-retry decorator with Torero to 
 
 ## Overview
 
-The auto-retry decorator provides a simple way to add retry logic to network automation scripts. It's designed to work with Torero's decorator system and can be attached to any service.
+The auto-retry decorator provides a simple way to add retry logic to network automation scripts. It's designed to work with Torero's decorator system and can be attached to any service. This implementation helps handle transient network issues by automatically retrying failed operations with configurable parameters.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+- Python 3.8 or higher installed
+- Git installed
+- Access to a network device for testing
+- Basic understanding of network automation concepts
 
 ## Project Structure
 
@@ -16,6 +24,24 @@ torero-resources/
 │   ├── auto-retry-deco.json    # JSON schema definition for the decorator
 │   └── torero_decorators.py    # Python implementation of the auto-retry decorator
 └── network-operations.json     # Service configuration file
+```
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/ArishIT/torero_prototype.git
+cd torero_prototype
+```
+
+2. Install the required dependencies:
+```bash
+python3 -m pip install -r torero-resources/network-scripts/requirements.txt
+```
+
+3. Configure Torero (if not already configured):
+```bash
+torero configure
 ```
 
 ## Setup with Torero
@@ -69,6 +95,16 @@ Successfully completed get-config
 Successfully completed apply-config
 ```
 
+## Configuration
+
+The auto-retry decorator supports the following parameters:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| max-retries | integer | 3 | Maximum number of retry attempts |
+| delay | number | 1.0 | Initial delay between retries in seconds |
+| backoff-factor | number | 2.0 | Multiplier for delay after each retry |
+
 ## Benefits
 
 - **Simplified Error Handling**: Automatically retry operations that might fail due to temporary issues
@@ -79,6 +115,31 @@ Successfully completed apply-config
 ## Dependencies
 
 The project requires the following Python packages:
-- `torero`
 - `requests>=2.31.0`
-- `urllib3>=2.0.7` 
+- `urllib3>=2.0.7`
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **ImportError: No module named 'torero'**
+   - Ensure you have installed all dependencies from requirements.txt
+   - Check if Python is in your PATH
+   - Try using `python3 -m pip install` instead of just `pip`
+
+2. **Permission Denied Errors**
+   - Ensure you have the necessary permissions to access network devices
+   - Check if your credentials are correctly configured
+
+3. **Retry Logic Not Working**
+   - Verify that the decorator is properly attached to your service
+   - Check the auto-retry-deco.json configuration
+   - Ensure the max-retries parameter is set appropriately
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 
