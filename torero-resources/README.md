@@ -6,6 +6,19 @@ This repository demonstrates how to use the auto-retry decorator with Torero to 
 
 The auto-retry decorator provides a simple way to add retry logic to network automation scripts. It's designed to work with Torero's decorator system and can be attached to any service. This implementation helps handle transient network issues by automatically retrying failed operations with configurable parameters.
 
+## Project Structure
+
+```
+torero-resources/
+├── README.md                 # Project documentation
+├── network-scripts/          # Main implementation directory
+│   ├── main.py              # Example script with auto-retry implementation
+│   ├── torero_decorators.py # Decorator implementation
+│   ├── auto-retry-deco.json # Configuration for retry behavior
+│   └── requirements.txt     # Project dependencies (none required)
+└── .git/                    # Git repository information
+```
+
 ## Installation
 
 1. Clone the repository:
@@ -14,10 +27,7 @@ git clone https://github.com/ArishIT/torero_prototype.git
 cd torero_prototype
 ```
 
-2. Install the required dependencies:
-```bash
-python3 -m pip install -r torero-resources/network-scripts/requirements.txt
-```
+2. No additional dependencies are required as the project uses only Python standard library modules.
 
 ## Setup with Torero
 
@@ -82,7 +92,25 @@ The auto-retry decorator supports the following parameters:
 
 ## Benefits
 
-- **Simplified Error Handling**: Automatically retry operations that might fail due to temporary issues
-- **Configurable Retry Logic**: Adjust retry parameters based on your specific needs
-- **Consistent Behavior**: Apply the same retry logic across different network automation scripts
-- **Detailed Logging**: Track retry attempts and failures for debugging
+- **Simplicity**: Uses only Python standard library modules
+- **Flexibility**: Configurable retry parameters through JSON schema
+- **Reliability**: Automatic handling of transient failures
+- **Transparency**: Detailed logging of retry attempts and outcomes
+
+## Implementation Details
+
+The project consists of two main components:
+
+1. **Auto-Retry Decorator** (`torero_decorators.py`):
+   - Implements the retry logic
+   - Configurable through JSON schema
+   - Provides detailed logging
+
+2. **Example Script** (`main.py`):
+   - Demonstrates decorator usage
+   - Simulates network operations
+   - Shows retry behavior in action
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
