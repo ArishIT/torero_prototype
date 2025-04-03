@@ -110,7 +110,3 @@ torero get services
 ```
 
 3. Make sure you're using the correct repository name and path in all commands.
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
