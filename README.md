@@ -6,19 +6,6 @@ This repository demonstrates how to use the auto-retry decorator with Torero to 
 
 The auto-retry decorator provides a simple way to add retry logic to network automation scripts. It's designed to work with Torero's decorator system and can be attached to any service. This implementation helps handle transient network issues by automatically retrying failed operations with configurable parameters.
 
-## Project Structure
-
-```
-torero-resources/
-├── README.md                 # Project documentation
-├── network-scripts/          # Main implementation directory
-│   ├── main.py              # Example script with auto-retry implementation
-│   ├── torero_decorators.py # Decorator implementation
-│   ├── auto-retry-deco.json # Configuration for retry behavior
-│   └── requirements.txt     # Project dependencies (none required)
-└── .git/                    # Git repository information
-```
-
 ## Installation
 
 1. Clone the repository:
@@ -26,9 +13,6 @@ torero-resources/
 git clone https://github.com/ArishIT/torero_prototype.git
 cd torero_prototype
 ```
-
-2. No additional dependencies are required as the project uses only Python standard library modules.
-
 ## Setup with Torero
 
 ### 1. Create a Repository
@@ -36,10 +20,6 @@ cd torero_prototype
 First, create a repository in Torero to store your scripts. You can use either a local file path or a GitHub URL:
 
 ```bash
-# Option 1: Using local file path
-torero create repository network-operations-repo --url file:///Users/arishvirani/Desktop/torero_project/torero-resources
-
-# Option 2: Using GitHub URL
 torero create repository network-operations-repo --url https://github.com/ArishIT/torero_prototype.git --reference main
 ```
 
@@ -130,7 +110,3 @@ torero get services
 ```
 
 3. Make sure you're using the correct repository name and path in all commands.
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
