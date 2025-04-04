@@ -7,7 +7,7 @@ This script simulates common network operations that might fail and need retries
 import random
 from torero_decorators import autoretry
 
-@autoretry(max_retries=3, delay=1.0, backoff_factor=2.0)
+@autoretry()
 def simulate_operation(operation):
     """Simulate a network operation that may fail"""
     # Simulate operation attempt with 30% chance of failure

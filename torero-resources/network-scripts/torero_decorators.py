@@ -5,6 +5,7 @@ Implementation of the auto-retry decorator for Torero services.
 
 import time
 import logging
+import json
 from functools import wraps
 from typing import Callable, Dict, Any
 
@@ -15,15 +16,33 @@ logging.basicConfig(
 )
 logger = logging.getLogger('torero_decorators')
 
-def autoretry(max_retries=3, delay=1.0, backoff_factor=2.0):
+def load_config(config_path: str = "auto-retry-deco.json") -> Dict[str, Any]:
     """
-    Decorator that automatically retries a function when it fails.
+    Load configuration from JSON file.
     
     Args:
-        max_retries (int): Maximum number of retry attempts
-        delay (float): Initial delay between retries in seconds
-        backoff_factor (float): Multiplier for delay after each retry
+        config_path (str): Path to the JSON configuration file
+        
+    Returns:
+        Dict[str, Any]: Configuration dictionary
     """
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+    return config['properties']
+
+def autoretry(config_path: str = "auto-retry-deco.json"):
+    """
+    Decorator that automatically retries a function when it fails.
+    Configuration is loaded from a JSON file.
+    
+    Args:
+        config_path (str): Path to the JSON configuration file
+    """
+    config = load_config(config_path)
+    max_retries = config['max-retries']['default']
+    delay = config['delay']['default']
+    backoff_factor = config['backoff-factor']['default']
+    
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
